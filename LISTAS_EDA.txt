@@ -1,0 +1,3 @@
+problema = ["sistema de daytrading para índices-forex", "base de datos de futbol", "sistemas de gestion de hosteleria, desde comida hasta utensilios"]
+
+datos a usar["base de datos de bancos o generales", "informacion recogida por empresas privadas(opta y wyscout)", "algún registro o software de utilidad para empresas del sector"]
