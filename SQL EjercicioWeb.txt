@@ -1,0 +1,118 @@
+SQL TRABAJO
+
+
+CREATE TABLE crime_scene_report ( date integer, type text, description text, city text )
+CREATE TABLE drivers_license ( id integer PRIMARY KEY, age integer, height integer, eye_color text, hair_color text, gender text, plate_number text, car_make text, car_model text )
+CREATE TABLE facebook_event_checkin ( person_id integer, event_id integer, event_name text, date integer, FOREIGN KEY (person_id) REFERENCES person(id) )
+CREATE TABLE interview ( person_id integer, transcript text, FOREIGN KEY (person_id) REFERENCES person(id) )
+CREATE TABLE get_fit_now_member ( id text PRIMARY KEY, person_id integer, name text, membership_start_date integer, membership_status text, FOREIGN KEY (person_id) REFERENCES person(id) )
+CREATE TABLE get_fit_now_check_in ( membership_id text, check_in_date integer, check_in_time integer, check_out_time integer, FOREIGN KEY (membership_id) REFERENCES get_fit_now_member(id) )
+CREATE TABLE solution ( user integer, value text )
+CREATE TABLE income (ssn CHAR PRIMARY KEY, annual_income integer)
+CREATE TABLE person (id integer PRIMARY KEY, name text, license_id integer, address_number integer, address_street_name text, ssn CHAR REFERENCES income (ssn), FOREIGN KEY (license_id) REFERENCES drivers_license (id))
+
+query 1
+SELECT *	
+FROM crime_scene_report
+WHERE type = "murder"
+AND city = "SQL City";
+Security footage shows that there were 2 witnesses. The first witness lives at the last house on "Northwestern Dr". The second witness, named Annabel, lives somewhere on "Franklin Ave".
+
+query 2
+SELECT *	
+FROM person
+WHERE name LIKE "Annab%";
+id	name		license_id	address_number	address_street_name	ssn
+16371	Annabel Miller	490173		103		Franklin Ave		318771143
+
+query 3
+SELECT *	
+FROM person
+WHERE address_street_name LIKE "Northwester%"
+ORDER BY address_number DESC;
+id	name		license_id	address_number	address_street_name	ssn
+14887	Morty Schapiro	118009		4919		Northwestern Dr		111564949
+
+query 4
+SELECT *	
+FROM interview
+WHERE person_id = 16371;
+person_id	transcript
+16371		I saw the murder happen, and I recognized the killer from my gym when I was working out last week on January the 9th.
+
+query 5
+SELECT *	
+FROM interview
+WHERE person_id = 14887;
+person_id	transcript
+14887		I heard a gunshot and then saw a man run out. He had a "Get Fit Now Gym" bag. The membership number on the bag started with "48Z". Only gold members have those bags. The man got into a car with a plate that included "H42W".
+
+query 6
+SELECT *	
+FROM drivers_license
+WHERE gender = "male" AND plate_number LIKE "%H42W%";
+id	age	height	eye_color	hair_color	gender	plate_number	car_make	car_model
+423327	30	70	brown		brown		male	0H42W2		Chevrolet	Spark LS
+664760	21	71	black		black		male	4H42WR		Nissan		Altima
+
+query 7
+SELECT *	
+FROM get_fit_now_check_in
+WHERE check_in_date = 20180109;
+AND membership_id LIKE "%48Z%";
+membership_id	check_in_date	check_in_time	check_out_time
+48Z7A		20180109	1600		1730
+48Z55		20180109	1530		1700
+
+
+
+
+
+query 8
+SELECT *	
+FROM get_fit_now_member
+WHERE membership_status = "gold"
+AND id = "48Z7A";
+id	person_id	name		membership_start_date	membership_status
+48Z7A	28819		Joe Germuska	20160305		gold
+
+query 9
+SELECT *	
+FROM person
+WHERE name LIKE "Joe Germuska";
+id	name		license_id	address_number	address_street_name	ssn
+28819	Joe Germuska	173289		111		Fisk Rd			138909730
+
+query 10
+SELECT *
+FROM income
+WHERE ssn = 100169584
+ssn		annual_income
+100169584	64500
+
+query 11
+SELECT get_fit_now_check_in.membership_id, get_fit_now_member.id, get_fit_now_member.name,
+get_fit_now_check_in.check_in_time, get_fit_now_check_in.check_out_time
+FROM get_fit_now_member
+JOIN get_fit_now_check_in
+ON get_fit_now_member.id = get_fit_now_check_in.membership_id
+WHERE check_in_date = 20180109;
+membership_id	id	name			check_in_time	check_out_time
+X0643		X0643	Shondra Ledlow		957		1164
+UK1F2		UK1F2	Zackary Cabotage	344		518
+XTE42		XTE42	Sarita Bartosh		486		1124
+1AE2H		1AE2H	Adriane Pelligra	461		944
+6LSTG		6LSTG	Burton Grippe		399		515
+7MWHJ		7MWHJ	Blossom Crescenzo	273		885
+GE5Q8		GE5Q8	Carmen Dimick		367		959
+48Z7A		48Z7A	Joe Germuska		1600		1730
+48Z55		48Z55	Jeremy Bowers		1530		1700
+90081		90081	Annabel Miller		1600		1700
+
+
+
+
+
+
+
+
